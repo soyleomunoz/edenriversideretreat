@@ -10,6 +10,11 @@
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200">
 <title>Eden Riverside Retreat | Camping & Nature Experiences – Isla de Maipo, Chile</title>
+<link rel="icon" href="img/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -25,6 +30,8 @@
   --gray: #6B6B6B;
   --white: #ffffff;
   --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -126,6 +133,9 @@ h1, h2, h3, h4 {
 }
 
 .lang-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
   padding: 0.3rem 0.75rem;
   font-size: 0.75rem;
   font-weight: 600;
@@ -134,13 +144,44 @@ h1, h2, h3, h4 {
   background: transparent;
   color: rgba(255,255,255,0.7);
   cursor: pointer;
-  transition: all var(--transition);
+  transition: background var(--transition), color var(--transition), transform 160ms var(--ease-out);
+}
+
+.lang-btn:active { transform: scale(0.94); }
+
+.lang-flag {
+  width: 1em;
+  height: 1em;
+  border-radius: 2px;
+  object-fit: cover;
+  flex-shrink: 0;
+  display: block;
 }
 
 .lang-btn.active {
   background: var(--yellow);
   color: var(--forest);
   border-radius: 30px;
+}
+
+/* ─── LANG TOGGLE DISCOVERY NUDGE ─── */
+@keyframes langAttention {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(233,196,106,0);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 5px rgba(233,196,106,0.28), 0 0 18px 2px rgba(233,196,106,0.4);
+    transform: scale(1.035);
+  }
+}
+
+.lang-toggle.attention {
+  animation: langAttention 1.6s var(--ease-in-out) 1.6s 2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lang-toggle.attention { animation: none; }
 }
 
 .btn-nav {
@@ -1586,9 +1627,10 @@ footer {
     <li><a href="#contact" data-i18n="nav_contact">Contact</a></li>
   </ul>
   <div class="nav-right">
-    <div class="lang-toggle">
-      <button class="lang-btn active" onclick="setLang('en')">EN</button>
-      <button class="lang-btn" onclick="setLang('es')">ES</button>
+    <div class="lang-toggle" id="langToggle">
+      <button class="lang-btn active" data-lang="en" onclick="setLang('en')" aria-label="English"><img src="img/flag-us.svg" class="lang-flag" alt="" loading="lazy">EN</button>
+      <button class="lang-btn" data-lang="es" onclick="setLang('es')" aria-label="Español"><img src="img/flag-cl.svg" class="lang-flag" alt="" loading="lazy">ES</button>
+      <button class="lang-btn" data-lang="pt" onclick="setLang('pt')" aria-label="Português"><img src="img/flag-br.svg" class="lang-flag" alt="" loading="lazy">PT</button>
     </div>
     <a href="#booking" class="btn-nav" data-i18n="nav_cta">Book Now</a>
     <div class="hamburger" id="hamburger" onclick="toggleMenu()">
@@ -2180,7 +2222,7 @@ footer {
           </div>
           <div>
             <h4 data-i18n="ci2_title">WhatsApp</h4>
-            <a href="https://wa.me/56975233425?text=Hello%2C%20I%20want%20more%20information" target="_blank">+56 9 7523 3425</a>
+            <a href="https://wa.me/56975233425" data-wa target="_blank">+56 9 7523 3425</a>
           </div>
         </div>
         <div class="contact-item reveal">
@@ -2257,7 +2299,7 @@ footer {
         <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.11-.9-2-2-2z"/></svg>
         <span data-i18n="cta_btn1">Reserve Your Spot</span>
       </a>
-      <a href="https://wa.me/56975233425?text=Hello%2C%20I%20want%20more%20information" target="_blank" class="btn-secondary" style="font-size:1rem;padding:1rem 2.25rem;">
+      <a href="https://wa.me/56975233425" data-wa target="_blank" class="btn-secondary" style="font-size:1rem;padding:1rem 2.25rem;">
         <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         <span data-i18n="cta_btn2">Chat on WhatsApp</span>
       </a>
@@ -2274,13 +2316,13 @@ footer {
   </a>
       <p style="margin-top:1rem;" data-i18n="footer_desc">A natural escape just 40 minutes from Santiago. Authentic camping experiences for international travelers.</p>
       <div class="footer-social">
-        <a href="#" class="social-link" aria-label="Instagram">
+        <a href="https://www.instagram.com/edenriversideretreat/" class="social-link" aria-label="Instagram" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
         </a>
-        <a href="https://wa.me/56975233425" class="social-link" aria-label="WhatsApp" target="_blank">
+        <a href="https://wa.me/56975233425" data-wa class="social-link" aria-label="WhatsApp" target="_blank">
           <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         </a>
-        <a href="#" class="social-link" aria-label="Facebook">
+        <a href="https://web.facebook.com/edenriversideretreat/" class="social-link" aria-label="Facebook" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
         </a>
       </div>
@@ -2307,7 +2349,7 @@ footer {
     <div class="footer-col">
       <h5 data-i18n="footer_contact_title">Contact</h5>
       <ul>
-        <li><a href="https://wa.me/56975233425" target="_blank">WhatsApp: +56 9 7523 3425</a></li>
+        <li><a href="https://wa.me/56975233425" data-wa target="_blank">WhatsApp: +56 9 7523 3425</a></li>
         <li><a href="#location" data-i18n="footer_isla">Isla de Maipo, Chile</a></li>
         <li><a href="#contact" data-i18n="footer_open">Open 24/7</a></li>
       </ul>
@@ -2320,7 +2362,7 @@ footer {
 </footer>
 
 <!-- WHATSAPP FAB -->
-<a href="https://wa.me/56975233425?text=Hello%2C%20I%20want%20more%20information" class="whatsapp-fab" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+<a href="https://wa.me/56975233425" data-wa class="whatsapp-fab" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
@@ -2519,7 +2561,8 @@ const translations = {
     footer_open: "Open 24/7",
     footer_rights: "All rights reserved.",
     footer_made: "Made with ❤️ in Chile. Designed by",
-    gestix_by: "Developed by"
+    gestix_by: "Developed by",
+    wa_message: "Contact from Eden Riverside Retreat, I would like more information."
   },
   es: {
     nav_experiences: "Experiencias",
@@ -2703,23 +2746,216 @@ const translations = {
     footer_open: "Abierto 24/7",
     footer_rights: "Todos los derechos reservados.",
     footer_made: "Hecho con ❤️ en Chile. Diseñado por",
-    gestix_by: "Desarrollado por"
+    gestix_by: "Desarrollado por",
+    wa_message: "Contacto desde Eden Riverside Retreat, deseo más información."
+  },
+  pt: {
+    nav_experiences: "Experiências",
+    nav_about: "Sobre",
+    nav_booking: "Reservar",
+    nav_blog: "Blog",
+    nav_location: "Localização",
+    nav_contact: "Contato",
+    nav_cta: "Reservar Agora",
+    hero_badge: "A só 40 min de Santiago · Isla de Maipo, Chile",
+    hero_title: "Escape para o Seu Éden\nna Natureza",
+    hero_sub: "Um refúgio de camping à beira do rio onde a floresta, o ar puro e a liberdade total se encontram. Sua autêntica aventura ao ar livre no Chile começa aqui.",
+    hero_cta1: "Reserve Seu Lugar",
+    hero_cta2: "Explorar Experiências",
+    stat1: "De Santiago",
+    stat2: "Dias Abertos",
+    stat3: "Pagamentos Online",
+    stat4: "Ambiente Natural",
+    scroll: "Deslizar",
+    strip1: "Aberto 24/7",
+    strip2: "Pagamentos Seguros com Stripe",
+    strip3: "Isla de Maipo, Chile",
+    strip4: "Turistas Internacionais Bem-vindos",
+    strip5: "Grupos e Eventos",
+    services_label: "O Que Oferecemos",
+    services_title: "Experiências Que Conectam Você à Natureza",
+    services_sub: "Do acampamento tranquilo a eventos animados em grupo, o Eden Riverside Retreat tem o cenário perfeito para cada aventura.",
+    tag_popular: "Popular",
+    tag_new: "Novo",
+    svc1_title: "Espaços para Camping",
+    svc1_desc: "Espaços amplos com áreas verdes, árvores com sombra e acesso a todas as instalações. Traga sua barraca ou alugue uma das nossas.",
+    svc2_title: "Churrasqueiras e Fogueiras",
+    svc2_desc: "Reúna-se em nossas áreas de churrasco e fogueiras para noites inesquecíveis sob as estrelas.",
+    svc3_title: "Esportes e Recreação",
+    svc3_desc: "Campo de futebol de tamanho oficial, áreas abertas para vôlei, frisbee e muito mais. Perfeito para dinâmicas de grupo e atividades em equipe.",
+    svc4_title: "Eventos e Celebrações",
+    svc4_desc: "Realize aniversários, retiros corporativos, excursões escolares ou celebrações privadas. Adaptamos o espaço à sua visão.",
+    svc5_title: "Reserva Online (USD)",
+    svc5_desc: "Reserve seu lugar em minutos com nosso sistema seguro de pagamento Stripe. Pague em USD de qualquer lugar do mundo.",
+    svc6_title: "Parcerias de Turismo",
+    svc6_desc: "Agências de viagem, empresas de transporte e operadores turísticos: entre em contato para construir alianças estratégicas e crescer juntos.",
+    benefits_label: "Por Que o Éden?",
+    benefits_title: "O Escape Perfeito, Fácil de Alcançar",
+    benefits_sub: "Tudo que você precisa para uma experiência autêntica na natureza — sem ir longe da cidade.",
+    img_badge: "de Santiago",
+    ben1_title: "Ambiente Natural Privilegiado",
+    ben1_desc: "Cercado por vegetação, árvores e o ar puro de Isla de Maipo — um verdadeiro santuário longe do barulho urbano.",
+    ben2_title: "Amigável para Internacionais",
+    ben2_desc: "Pague em USD via Stripe, encontre informações em inglês e espanhol. Facilitamos a vida de todo viajante, de qualquer lugar do mundo.",
+    ben3_title: "Versátil e Espaçoso",
+    ben3_desc: "Amplos terrenos ideais para viajantes solo, casais, famílias, grupos de amigos e eventos corporativos.",
+    ben4_title: "Seguro e Confiável",
+    ben4_desc: "Aberto 24 horas por dia, com supervisão no local, instalações seguras e um ambiente acolhedor para viajantes solo e famílias.",
+    about_label: "Nossa História",
+    about_title: "Camping El Edén — Um Sonho de Família",
+    about_p1: "Situado às margens do rio em Isla de Maipo, o Eden Riverside Retreat nasceu da paixão por compartilhar a beleza da natureza chilena com o mundo. O que começou como um camping familiar tornou-se um destino querido por viajantes de todo o planeta.",
+    about_p2: "Acreditamos que todos merecem acesso a experiências autênticas ao ar livre — e com Santiago a apenas 40 minutos, não há desculpa para não escapar para a natureza. Nossa equipe está disponível 24 horas por dia para tornar sua estadia inesquecível.",
+    feat1: "Áreas Verdes",
+    feat2: "Zonas de Churrasco",
+    feat3: "Campo de Futebol",
+    feat4: "Aberto 24/7",
+    about_card: "Natural",
+    act_label: "Vida ao Ar Livre",
+    act_title: "Viva o Ar Livre",
+    act_sub: "Desconecte-se da cidade e reconecte-se com o que realmente importa.",
+    act1: "Acampamento em Barraca",
+    act2: "Noites de Churrasco",
+    act3: "Futebol e Esportes",
+    act4: "Atividades no Rio",
+    act5: "Observação de Estrelas",
+    book_label: "Reserva Fácil",
+    book_title: "Reserve Seu Lugar em Minutos",
+    book_sub: "Simples, seguro e internacional. Pague em USD de qualquer lugar do mundo com Stripe.",
+    step1_title: "Escolha Suas Datas",
+    step1_desc: "Selecione as datas de chegada e saída usando nosso calendário de disponibilidade em tempo real.",
+    step2_title: "Selecione Sua Experiência",
+    step2_desc: "Escolha os serviços e atividades que deseja incluir — espaços de camping, churrasco, instalações esportivas ou pacotes completos de eventos.",
+    step3_title: "Pague Online com Segurança",
+    step3_desc: "Complete sua reserva com o Stripe — a plataforma de pagamentos mais confiável do mundo. Pague em USD, sem necessidade de conta local.",
+    step4_title: "Receba a Confirmação",
+    step4_desc: "Receba uma confirmação instantânea por e-mail com todos os detalhes, instruções e o que trazer. Estaremos prontos para recebê-lo!",
+    bcard_title: "Pronto para Escapar?",
+    bcard_desc: "Junte-se a centenas de viajantes que já descobriram seu Éden. Reserve sua estadia hoje — as vagas são limitadas!",
+    stripe_badge: "Protegido pelo Stripe · Pagamentos Internacionais em USD",
+    price_from: "A partir de",
+    price_note: "por pessoa por noite · descontos para grupos disponíveis",
+    bcard_btn: "Reservar Agora →",
+    bcard_note: "Cancelamento gratuito até 48h antes da chegada",
+    testi_label: "Avaliações dos Hóspedes",
+    testi_title: "O Que Dizem os Viajantes",
+    t1_text: "Um lugar absolutamente mágico! Passamos duas noites aqui depois de explorar Santiago e foi a pausa perfeita. As áreas verdes são enormes, as instalações de churrasco são ótimas e a equipe não poderia ser mais acolhedora.",
+    t1_country: "🇫🇷 França · Viajante Solo",
+    t2_text: "Organizamos um retiro da empresa aqui e superou todas as expectativas. O campo de futebol e os espaços ao ar livre são perfeitos para atividades em grupo. Reservar online em USD foi super prático. Recomendo muito!",
+    t2_country: "🇩🇪 Alemanha · Grupo Corporativo",
+    t3_text: "Que joia escondida! Estar a apenas 40 minutos de Santiago e ao mesmo tempo se sentir completamente imerso na natureza é incrível. As estrelas à noite são de tirar o fôlego. Com certeza voltaremos com mais amigos.",
+    t3_country: "🇺🇸 EUA · Casal",
+    t4_text: "Cheguei como mochileiro e saí como fã para a vida toda. Acessível, bonito, e o espírito de comunidade entre os campistas é algo especial. O sistema de pagamento Stripe tornou tudo muito fácil de gerenciar do exterior.",
+    t4_country: "🇦🇺 Austrália · Mochileiro",
+    blog_label: "Dicas de Viagem",
+    blog_title: "Histórias e Dicas",
+    blog_sub: "Explore o Chile pelos olhos de outros viajantes.",
+    blog1_cat: "Guia de Destino",
+    blog1_title: "Os Melhores Escapes Naturais Perto de Santiago, Chile",
+    blog1_desc: "Santiago é uma das cidades mais vibrantes da América do Sul — mas o que muitos visitantes não percebem é como é fácil escapar para uma natureza intocada e deslumbrante a menos de uma hora de carro. Aqui estão nossas principais recomendações.",
+    blog2_cat: "Experiência Local",
+    blog2_title: "O Que Fazer em Isla de Maipo: Um Guia Completo",
+    blog2_desc: "De passeios por vinícolas e caminhadas à beira do rio até comida local encantadora e aventuras de camping, Isla de Maipo oferece uma experiência surpreendentemente rica para quem se aventura além da capital.",
+    blog3_cat: "Dicas de Viagem",
+    blog3_title: "Dicas Essenciais para Visitar o Chile",
+    blog3_desc: "Planejando sua primeira viagem ao Chile? De moeda e transporte até equipamentos essenciais e etiqueta cultural — tudo o que você precisa saber antes de partir.",
+    blog_read: "Leia Mais →",
+    faq_label: "Perguntas",
+    faq_title: "Perguntas Frequentes",
+    faq1_q: "A que distância fica de Santiago?",
+    faq1_a: "O Eden Riverside Retreat está localizado em Isla de Maipo, a apenas 40 minutos do centro de Santiago de carro. É o passeio de um dia ou escape noturno perfeito a partir da capital.",
+    faq2_q: "Posso pagar em USD?",
+    faq2_a: "Sim! Usamos o Stripe para todos os pagamentos online, que aceita cartões internacionais e permite pagar em USD. Não é necessária conta bancária chilena nem moeda local.",
+    faq3_q: "Preciso trazer minha própria barraca?",
+    faq3_a: "Você pode trazer sua própria barraca. Também temos opções de aluguel de equipamentos disponíveis. Entre em contato com antecedência para providenciar o aluguel e garantir disponibilidade.",
+    faq4_q: "Podemos organizar eventos e atividades em grupo?",
+    faq4_a: "Com certeza. Recebemos retiros corporativos, festas de aniversário, excursões escolares e celebrações privadas. Temos amplos espaços abertos, campo de futebol, áreas de churrasco e podemos adaptar o local às necessidades do seu evento.",
+    faq5_q: "Há transporte público até o camping?",
+    faq5_a: "A forma mais fácil é de carro ou transfer privado. Podemos ajudar a conectá-lo com nossos parceiros de transporte local a partir de Santiago. Pergunte-nos pelo WhatsApp sobre as opções atuais de transfer.",
+    faq6_q: "Qual é a política de cancelamento?",
+    faq6_a: "Oferecemos cancelamento gratuito até 48 horas antes da chegada programada. Cancelamentos feitos dentro de 48 horas podem estar sujeitos a uma cobrança parcial. Entre em contato conosco para circunstâncias especiais.",
+    faq7_q: "Animais de estimação são permitidos?",
+    faq7_a: "Sim, animais de estimação bem comportados são bem-vindos no Eden Riverside Retreat. Pedimos que fiquem na coleira em áreas compartilhadas e que os donos recolham os dejetos. Avise-nos no momento da reserva.",
+    faq8_q: "Vocês estão abertos o ano todo?",
+    faq8_a: "Sim! Estamos abertos 365 dias por ano, 24 horas por dia. O clima ameno do Vale do Maipo torna as atividades ao ar livre agradáveis durante a maior parte do ano.",
+    loc_label: "Encontre-nos",
+    loc_title: "Como Chegar",
+    loc_sub: "Somos fáceis de alcançar a partir de Santiago — a apenas 40 minutos.",
+    trans1_title: "De Carro Desde Santiago",
+    trans1_desc: "Pegue a Ruta 5 Sur em direção a Buin, depois saia em direção a Isla de Maipo. Siga as placas para La Villita. Endereço: Calle Crucero 488, La Villita. A apenas 40 minutos do centro de Santiago.",
+    trans2_title: "Transfer Privado",
+    trans2_desc: "Trabalhamos com empresas de transfer locais para oferecer busca direta em hotéis de Santiago e no aeroporto. Pergunte-nos pelo WhatsApp para organizar seu transfer.",
+    trans3_title: "Agências e Operadores Turísticos",
+    trans3_desc: "Damos as boas-vindas a agências de viagem e operadores turísticos para incluírem-nos em seus roteiros. Entre em contato para conversar sobre oportunidades de parceria e tarifas para grupos.",
+    addr_label: "Endereço:",
+    addr: "Calle Crucero 488, La Villita, Isla de Maipo, Región Metropolitana, Chile",
+    cont_label: "Fale Conosco",
+    cont_title: "Vamos Planejar Sua Estadia",
+    ci1_title: "Localização",
+    ci1_desc: "Calle Crucero 488, La Villita\nIsla de Maipo, Chile\n40 min de Santiago",
+    ci2_title: "WhatsApp",
+    ci3_title: "Para Operadores Turísticos",
+    ci3_desc: "Interessado em parcerias? Damos as boas-vindas a agências de viagem e empresas de transporte que queiram colaborar conosco.",
+    ci4_title: "Horário",
+    ci4_desc: "Aberto 24/7, 365 dias por ano.\nSempre prontos para recebê-lo.",
+    f_name: "Nome",
+    f_email: "E-mail",
+    f_dates: "Datas",
+    f_guests: "Hóspedes",
+    f_interest: "Interesse",
+    f_sel: "Selecionar...",
+    f_opt1: "Estadia de Camping",
+    f_opt2: "Evento / Celebração",
+    f_opt3: "Retiro Corporativo",
+    f_opt4: "Parceria Turística",
+    f_msg: "Mensagem",
+    f_msg_ph: "Conte-nos sobre seus planos...",
+    f_submit: "Enviar Mensagem",
+    form_success: "Mensagem enviada! Entraremos em contato em breve.",
+    form_error: "Por favor, preencha todos os campos obrigatórios.",
+    cta_label: "Sua Aventura Está à Espera",
+    cta_title: "Pronto para Encontrar Seu Éden?",
+    cta_sub: "Junte-se a viajantes de todo o mundo que descobriram este lugar mágico nos arredores de Santiago. Reserve hoje — as vagas se esgotam rápido.",
+    cta_btn1: "Reserve Seu Lugar",
+    cta_btn2: "Conversar no WhatsApp",
+    footer_desc: "Um escape natural a apenas 40 minutos de Santiago. Experiências autênticas de camping para viajantes internacionais.",
+    footer_explore: "Explorar",
+    footer_activities: "Atividades",
+    footer_reviews: "Avaliações",
+    footer_info: "Informações",
+    footer_how_book: "Como Reservar",
+    footer_faq: "Perguntas Frequentes",
+    footer_get_there: "Como Chegar",
+    footer_partners: "Parcerias",
+    footer_contact_title: "Contato",
+    footer_isla: "Isla de Maipo, Chile",
+    footer_open: "Aberto 24/7",
+    footer_rights: "Todos os direitos reservados.",
+    footer_made: "Feito com ❤️ no Chile. Desenvolvido por",
+    gestix_by: "Desenvolvido por",
+    wa_message: "Contato da Eden Riverside Retreat, gostaria de mais informações."
   }
 };
 
+const isFirstLangVisit = !localStorage.getItem('eden_lang');
 let currentLang = localStorage.getItem('eden_lang') || 'en';
 
 function setLang(lang) {
   currentLang = lang;
   localStorage.setItem('eden_lang', lang);
+  document.documentElement.lang = lang;
+  document.getElementById('langToggle')?.classList.remove('attention');
   document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.textContent.trim().toLowerCase() === lang);
+    btn.classList.toggle('active', btn.dataset.lang === lang);
   });
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     if (translations[lang][key]) {
       el.innerHTML = translations[lang][key].replace(/\n/g, '<br>');
     }
+  });
+  document.querySelectorAll('[data-wa]').forEach(a => {
+    const base = a.href.split('?')[0];
+    a.href = base + '?text=' + encodeURIComponent(translations[lang].wa_message);
   });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     const key = el.getAttribute('data-i18n-placeholder');
@@ -2728,6 +2964,33 @@ function setLang(lang) {
 }
 
 setLang(currentLang);
+
+// ─── LANG TOGGLE DISCOVERY NUDGE (first-time visitors only) ───
+if (isFirstLangVisit) {
+  const langToggle = document.getElementById('langToggle');
+  if (langToggle) {
+    setTimeout(() => langToggle.classList.add('attention'), 50);
+    langToggle.addEventListener('animationend', () => langToggle.classList.remove('attention'), { once: true });
+  }
+}
+
+// ─── LANG KEYBOARD SHORTCUT (Ctrl + ←/→) ───
+const langOrder = ['en', 'es', 'pt'];
+document.addEventListener('keydown', (e) => {
+  if (!e.ctrlKey || (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight')) return;
+  const tag = document.activeElement ? document.activeElement.tagName : '';
+  const isEditable = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' ||
+    (document.activeElement && document.activeElement.isContentEditable);
+  if (isEditable) return;
+  e.preventDefault();
+  const idx = langOrder.indexOf(currentLang);
+  const step = e.key === 'ArrowRight' ? 1 : -1;
+  const nextLang = langOrder[(idx + step + langOrder.length) % langOrder.length];
+  setLang(nextLang);
+});
+
+// ─── DISABLE CONTEXT MENU ───
+document.addEventListener('contextmenu', (e) => e.preventDefault());
 
 // ─── NAVBAR SCROLL + BACK TO TOP ───
 window.addEventListener('scroll', () => {
